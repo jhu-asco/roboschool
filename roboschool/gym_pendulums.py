@@ -55,7 +55,7 @@ class RoboschoolInvertedDoublePendulum(RoboschoolMujocoXmlEnv):
         #vel_penalty = 1e-3 * v1**2 + 5e-3 * v2**2
         vel_penalty = 0
         alive_bonus = 10
-        done = self.pos_y + 0.3 <= 1
+        done = False #self.pos_y + 0.3 <= 1
         self.rewards = [float(alive_bonus), float(-dist_penalty), float(-vel_penalty)]
         self.frame  += 1
         self.done   += done   # 2 == 1+True
@@ -110,8 +110,12 @@ class RoboschoolInvertedPendulum(RoboschoolMujocoXmlEnv):
             reward = np.cos(self.theta)
             done = False
         else:
-            reward = 1.0
-            done = np.abs(self.theta) > .2
+            if np.abs(self.theta) > .2:
+                reward = 0
+            else:
+                reward = 1.0
+            done = False
+            #done = np.abs(self.theta) > .2
         self.rewards = [float(reward)]
         self.frame  += 1
         self.done   += done   # 2 == 1+True
@@ -123,5 +127,7 @@ class RoboschoolInvertedPendulum(RoboschoolMujocoXmlEnv):
         self.camera.move_and_look_at(0,1.2,1.0, 0,0,0.5)
 
 class RoboschoolInvertedPendulumSwingup(RoboschoolInvertedPendulum):
-    swingup = True
+    def __init__(self):
+        RoboschoolInvertedPendulum.__init__(self, True)
+        RoboschoolMujocoXmlEnv.__init__(self, 'inverted_pendulum.xml', 'cart', action_dim=1, obs_dim=5)
 

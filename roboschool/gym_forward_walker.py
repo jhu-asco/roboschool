@@ -1,3 +1,4 @@
+from OpenGL import GLU
 from roboschool.scene_abstract import cpp_household
 from roboschool.scene_stadium import SinglePlayerStadiumScene
 from roboschool.multiplayer import SharedMemoryClientEnv
